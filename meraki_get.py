@@ -40,7 +40,20 @@ def get_device_statuses() -> list:
 
 
 def main():
-    pprint.pprint(get_device_statuses())
+    serial = input("Enter Device Serial Number: ")
+    serial = serial.upper()
+    print("{:^20} {:^20} {:^20} {:^20} {:^20}".format("Name", "Serial", "Mac Address", "Public IP", "Network Name"))
+    print("-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 20)
+    devices = get_device_statuses()
+    not_found= True
+    for device in devices:
+        if serial in device['serial']:
+            net_name = get_data("networks/{}".format(device['networkId']))['name']
+            not_found = False
+            print("{:20} {:20} {:20} {:20} {:20}".format(device['name'], device['serial'], device['mac'],
+                                                     device['publicIp'], net_name))
+    if not_found:
+        print("Device not found")
 
 
 if __name__ == "__main__":
