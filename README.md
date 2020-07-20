@@ -2,7 +2,7 @@
 
 > You should include a file named credential.py in the same directory with content as below:
 ```
-apikey = "<YOUR IP KEY>"
+APIKEY = "<YOUR IP KEY>"
 ```
 
 1. **meraki_get:** _Core file included in other scripts, no need to run._
