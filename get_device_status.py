@@ -18,8 +18,9 @@ def get_devices_sts() -> list:
 def main():
     serial = input("Enter Device Serial Number: ")
     serial = serial.upper()
-    print("{:^20} {:^20} {:^20} {:^20} {:^20}".format("Name", "Serial", "Mac Address", "Public IP", "Network Name"))
-    print("-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 20)
+    print("{:^20} {:^20} {:^20} {:^20} {:^20} {:^20} {:^25}".format("Name", "Serial", "Mac Address",
+                                                             "Public IP", "Network Name", "Status", "Last Seen"))
+    print("-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 25 )
 
     # check if device status file exists and current
     if path.isfile("devices_status.json"):
@@ -43,9 +44,12 @@ def main():
         if serial in device['serial']:
             net_name = get_data("networks/{}".format(device['networkId']))['name']
             not_found = False
-            dev_name, dev_ser, dev_mac, dev_pub, dev_net = str(device['name']), str(device['serial']), \
-                                                           str(device['mac']), str(device['publicIp']), str(net_name)
-            print("{:20} {:^20} {:^20} {:^20} {:>20}".format(dev_name, dev_ser, dev_mac, dev_pub, dev_net))
+            dev_name, dev_ser, dev_mac, \
+            dev_pub, dev_net, dev_status, last_seen = str(device['name']), str(device['serial']), \
+                                                      str(device['mac']), str(device['publicIp']), str(net_name), \
+                                                      str(device['status']), str(device['lastReportedAt'])
+            print("{:20} {:^20} {:^20} {:^20} {:<20} {:^20} {:>25}".format(dev_name, dev_ser, dev_mac,
+                                                                           dev_pub, dev_net, dev_status, last_seen))
     if not_found:
         print("Device not found")
 

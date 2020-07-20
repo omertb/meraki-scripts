@@ -39,7 +39,7 @@ def get_org_nets() -> list:
     if path.isfile("org_networks.json"):
         file_lifetime = int((time.time() - path.getmtime("org_networks.json"))/3600)
 
-        if file_lifetime > 24:  # if file is older than a day get current device statuses
+        if file_lifetime > 168:  # if the file is older than 7 days get current networks
             for org in org_id_list:
                 nets_list.extend(get_data("organizations/{}/networks".format(org)))
             with open("org_networks.json", "w") as json_file:
