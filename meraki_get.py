@@ -59,7 +59,8 @@ def get_org_nets() -> list:
 
 
 def main():
-    get_org_nets()
+    print("Number of Organizations: {}".format(len(get_organization_ids())))
+    print("Number of Networks: {}".format(len(get_org_nets())))
 
 
 if __name__ == "__main__":
