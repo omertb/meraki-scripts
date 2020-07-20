@@ -10,5 +10,5 @@ APIKEY = "<YOUR IP KEY>"
 as a json file in the same directory._
 
 3. **get_clients:** _Retrieves all clients info in your organization and saves as a json file in the same directory._
-__BEWARE!!: it retrieves one by one for each networks, so it may take some considerable time; e.g it took about 90 minutes
-for 3000 networks in an organization.__
+__BEWARE!!: it retrieves one by one for each networks, so it may take some considerable time; e.g it took about 50 minutes
+for about 3000 networks in an organization.__

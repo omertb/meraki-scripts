@@ -13,9 +13,11 @@ def update_clients():
             for net in nets:
                 net_clients = get_data("networks/{}/clients".format(net['id']))
                 for client in net_clients:
-                    # network ids are added to each client
-                    # where it doesn't contain in api response
+                    # network id, type and name are added to each client
+                    # where they are not included in api response
                     client['net_id'] = net['id']
+                    client['net_type'] = net['type']
+                    client['net_name'] = net['name']
 
                 clients.extend(net_clients)
 
@@ -50,7 +52,10 @@ def get_clients():
 
 
 def main():
+    t1 = time.time()
     update_clients()
+    t2 = time.time()
+    print("clients update time: {}".format(t2-t1))
 
 
 if __name__ == "__main__":
