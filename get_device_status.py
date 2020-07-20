@@ -22,11 +22,11 @@ def main():
                                                              "Public IP", "Network Name", "Status", "Last Seen"))
     print("-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 25 )
 
-    # check if device status file exists and current
+    # check if devices status file exists and current
     if path.isfile("devices_status.json"):
         file_lifetime = int((time.time() - path.getmtime("devices_status.json"))/3600)
 
-        if file_lifetime > 24:  # if file is older than a day get current device statuses
+        if file_lifetime > DEV_LIVE:  # get current devices status, if the file is older
             devices = get_devices_sts()
             with open("devices_status.json", "w") as json_file:
                 json.dump(devices, json_file, indent=4)

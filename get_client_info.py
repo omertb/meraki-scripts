@@ -8,7 +8,7 @@ def get_clients():
     if path.isfile("clients.json"):
         file_lifetime = int((time.time() - path.getmtime("clients.json"))/3600)
 
-        if file_lifetime > 5:  # if the file is older than x hours get current current clients
+        if file_lifetime > CLI_LIFE:  # get current clients, if the file is older
             nets = get_org_nets()
             clients = []
             # t1 = time.time()

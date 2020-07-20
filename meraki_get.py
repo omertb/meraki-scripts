@@ -5,6 +5,7 @@
 import requests
 import json
 from credential import *
+from constants import *
 from os import path
 import time
 
@@ -12,7 +13,7 @@ import time
 # requests.packages.urllib3.disable_warnings()
 
 cred_header = {
-    'X-Cisco-Meraki-API-Key': apikey
+    'X-Cisco-Meraki-API-Key': APIKEY
 }
 
 
@@ -39,7 +40,7 @@ def get_org_nets() -> list:
     if path.isfile("org_networks.json"):
         file_lifetime = int((time.time() - path.getmtime("org_networks.json"))/3600)
 
-        if file_lifetime > 168:  # if the file is older than 7 days get current networks
+        if file_lifetime > NET_LIFE:  # get current networks, if the file is older
             for org in org_id_list:
                 nets_list.extend(get_data("organizations/{}/networks".format(org)))
             with open("org_networks.json", "w") as json_file:
