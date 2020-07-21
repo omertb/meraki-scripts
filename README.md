@@ -17,5 +17,5 @@ for about 3000 networks in an organization.__
 4. **get_client_info.py:** _Finds a client against IP/MAC address and prints client specific info such as device, network,
  port, ssid... It needs **get_clients.py** script to be run in order to function._ 
  
-> Mac address searches with symbols dash or colon, upper case, lower case are all valid. 
->Last for character seach without symbol is valid as well.
+> Mac address searches with/without symbols dash or colon, upper case, lower case are all valid. 
+>Last characters search with/without symbol is valid as well.
