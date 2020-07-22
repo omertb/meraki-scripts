@@ -50,12 +50,12 @@ def get_client_events(client) -> list:
 
 
 def print_clients_info(clients):
-    print("{:^17} {:^18} {:^14} {:^20} {:^20} {:^20} {:^14} {:^16} {:^22} {:^8}".format("IP Address", "MAC Address",
+    print("{:^17} {:^18} {:^14} {:^20} {:^20} {:^20} {:^14} {:^20} {:^22} {:^8}".format("IP Address", "MAC Address",
                                                                                         "OS", "Vendor", "Device Name",
                                                                                         "Network Name", "Network Type",
                                                                                         "Vlan/Port/SSID", "Last Seen",
                                                                                         "Status"))
-    print("-" * 17, "-" * 18, "-" * 14, "-" * 20, "-" * 20, "-" * 20, "-" * 14, "-" * 16, "-" * 22, "-" * 8)
+    print("-" * 17, "-" * 18, "-" * 14, "-" * 20, "-" * 20, "-" * 20, "-" * 14, "-" * 20, "-" * 22, "-" * 8)
 
     for client in clients:
         # dev_name = next((device['name'] for device in devices if device['name'] == client['recentDeviceSerial']), None)
@@ -67,6 +67,8 @@ def print_clients_info(clients):
         net_name = str(client['net_name'])  # str(networks[net_idx]['name'])
         vlan = str(client['vlan'])
         ssid = str(client['ssid'])
+        if len(ssid) > 12:
+            ssid = ".." + ssid[-10:]  # chop to the last 10 characters to fit
         port = str(client['switchport'])
         vlan_port_ssid = vlan + "/" + port + "/" + ssid
 
@@ -78,7 +80,7 @@ def print_clients_info(clients):
         vendor = vendor[:20]  # strip to fit into 20 characters
 
         print("{:^17} {:^18} {:^14} {:^20} {:^20} "
-              "{:^20} {:^14} {:^16} {:^22} {:^8}".format(ip, mac, os, vendor, dev_name, net_name, net_type,
+              "{:^20} {:^14} {:^20} {:^22} {:^8}".format(ip, mac, os, vendor, dev_name, net_name, net_type,
                                                          vlan_port_ssid, last_seen, status))
 
 
@@ -88,9 +90,9 @@ def chunk_string(string, length):
 
 def print_client_events(events):
     print("\n### Related Event Logs ###")
-    print("{:<25} {:^20} {:^12} {:^30} {:^20} {:^40}".format("Log Time", "Client MAC Address", "Chnl/RSSI/VL",
-                                                             "DNS/DHCP", "DHCP MAC Address", "Event Log"))
-    print("-" * 25, "-" * 20, "-" * 12, "-" * 30, "-" * 20, "-" * 40)
+    print("{:<25} {:^20} {:^12} {:^30} {:^20}   {:^40}".format("Log Time", "Client MAC Address", "Chnl/RSSI/VL",
+                                                               "DNS/DHCP", "DHCP MAC Address", "Event Log"))
+    print("-" * 25, "-" * 20, "-" * 12, "-" * 30, "-" * 20, " ", "-" * 40)
     for event in events:
         log_time = time.ctime(event['occurredAt'])
         cli_mac = event['details']['clientMac']
@@ -131,9 +133,9 @@ def print_client_events(events):
         event_log_list = list(chunk_string(event_log, 40))
 
         print("{:<25} {:^20} {:^12} {:^30} {:^20}".format(log_time, cli_mac, cha_rss_vla, dns_dhcp, dhcp_mac), end = '')
-        print("{:<40}".format(event_log_list[0]))
+        print(" # {:<40}".format(event_log_list[0]))
         for line in event_log_list[1:]:
-            print("{:111}{:<40}".format("", line))
+            print("{:111}{:^3}{:<40}".format("", ">", line))
 
 
 def main():
@@ -189,11 +191,15 @@ def main():
     for client in clients:
         client_events.extend(get_client_events(client))
 
-    if not client_events:
+    now = time.time()
+    # create a new list with newer events
+    last_client_events = [event for event in client_events if now - int(event['occurredAt']) < EVT_AGE]
+
+    if not last_client_events:
         print("Client related logs not found.")
         return
     else:
-        print_client_events(client_events)
+        print_client_events(last_client_events)
 
 
 if __name__ == '__main__':
