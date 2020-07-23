@@ -35,28 +35,40 @@ def get_devices():
     return devices
 
 
+def search_device(serial) -> list:
+    devices = get_devices()
+    found_devices = []
+    for device in devices:
+        if serial in device['serial']:
+            device['net_name'] = get_data("networks/{}".format(device['networkId']))['name']
+            found_devices.append(device)
+
+    return found_devices
+
+
+def print_device_info(serial):
+    found_devices = search_device(serial)
+    if not found_devices:
+        print("Device not found")
+        return
+    else:
+        print("{:^20} {:^20} {:^20} {:^20} {:^20} {:^20} {:^25}".format("Name", "Serial", "Mac Address",
+                                                                        "Public IP", "Network Name", "Status",
+                                                                        "Last Seen"))
+        print("-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 25)
+        for device in found_devices:
+            dev_name, dev_ser, dev_mac, dev_pub, \
+            dev_net, dev_status, last_seen = str(device['name']), str(device['serial']), str(device['mac']), \
+                                             str(device['publicIp']), str(device['net_name']), str(device['status']), \
+                                             str(device['lastReportedAt'])
+            print("{:20} {:^20} {:^20} {:^20} {:<20} {:^20} {:>25}".format(dev_name, dev_ser, dev_mac,
+                                                                           dev_pub, dev_net, dev_status, last_seen))
+
+
 def main():
     serial = input("Enter Device Serial Number: ")
     serial = serial.upper()
-    print("{:^20} {:^20} {:^20} {:^20} {:^20} {:^20} {:^25}".format("Name", "Serial", "Mac Address",
-                                                             "Public IP", "Network Name", "Status", "Last Seen"))
-    print("-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 25 )
-
-    devices = get_devices()
-
-    not_found= True
-    for device in devices:
-        if serial in device['serial']:
-            net_name = get_data("networks/{}".format(device['networkId']))['name']
-            not_found = False
-            dev_name, dev_ser, dev_mac,\
-            dev_pub, dev_net, dev_status, last_seen = str(device['name']), str(device['serial']), \
-                                                      str(device['mac']), str(device['publicIp']), str(net_name), \
-                                                      str(device['status']), str(device['lastReportedAt'])
-            print("{:20} {:^20} {:^20} {:^20} {:<20} {:^20} {:>25}".format(dev_name, dev_ser, dev_mac,
-                                                                           dev_pub, dev_net, dev_status, last_seen))
-    if not_found:
-        print("Device not found")
+    print_device_info(serial)
 
 
 if __name__ == "__main__":

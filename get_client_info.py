@@ -1,6 +1,5 @@
 from get_clients import *
 from getch import getch
-import pprint
 
 
 # Deauthentication Reason Code Table
@@ -31,6 +30,7 @@ reason_codes = {
     '23' : 'IEEE 802.1X authentication failed.',
     '24' : 'Cipher suite rejected because of the security policy.'
 }
+
 
 def get_clients_by_mac(mac, all_clients) -> list:
     clients = list(filter(lambda client: client['mac'].replace(":", "").endswith(mac), all_clients))
@@ -172,6 +172,7 @@ def main():
 
         elif option == 2:
             mac_addr = input("Enter a Mac address: ")
+            # replace colons, dashes, convert to lower case to ignore input format
             mac_addr = mac_addr.lower().replace(":", "").replace("-", "")
             clients = get_clients_by_mac(mac_addr, all_clients)
 
