@@ -26,6 +26,13 @@ def update_clients():
             with open("clients.json", "w") as json_file:
                 json.dump(clients, json_file, indent=4)
 
+            t2 = time.time()
+            elapsed_time = round(t2 - t1)
+            minutes = elapsed_time // 60
+            seconds = elapsed_time % 60
+            print("\nIt took {} minute(s) and {} seconds \n"
+                  "to retrieve total {} clients of {} networks".format(minutes, seconds, len(clients), len(nets)))
+
         else:
             with open("clients.json") as json_file:
                 clients = json.load(json_file)
@@ -46,12 +53,12 @@ def update_clients():
         with open("clients.json", "w") as json_file:
             json.dump(clients, json_file, indent=4)
 
-    t2 = time.time()
-    elapsed_time = round(t2 - t1)
-    minutes = elapsed_time // 60
-    seconds = elapsed_time % 60
-    print("\nIt took {} minute(s) and {} seconds \n"
-          "to retrieve total {} clients of {} networks".format(minutes, seconds, len(clients), len(nets)))
+        t2 = time.time()
+        elapsed_time = round(t2 - t1)
+        minutes = elapsed_time // 60
+        seconds = elapsed_time % 60
+        print("\nIt took {} minute(s) and {} seconds \n"
+              "to retrieve total {} clients of {} networks".format(minutes, seconds, len(clients), len(nets)))
 
     return clients
 
