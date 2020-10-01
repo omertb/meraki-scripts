@@ -1,0 +1,10 @@
+.idea
+__pycache__
+all_devices.json
+clients.back.json
+clients.json
+credential.py
+devices_status.json
+net_name_list.txt
+org_networks.json
+venv

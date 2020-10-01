@@ -20,8 +20,11 @@ cred_header = {
 def get_data(item) -> list:
     url = "https://api.meraki.com/api/v0/{}".format(item)
     response = requests.request("GET", url, headers=cred_header)
-    response_list = json.loads(response.text)
-    return response_list
+    if response.status_code == 200:
+        response_list = json.loads(response.text)
+        return response_list
+    else:
+        return None
 
 
 def get_organization_ids() -> list:
@@ -30,6 +33,16 @@ def get_organization_ids() -> list:
     for organization in org_data_list:
         org_id_list.append(organization['id'])
     return org_id_list
+
+
+def get_templates():
+    org_id_list = get_organization_ids()
+    templates_dict = {}
+    for org_id in org_id_list:
+        templates = get_data('organizations/{}/configTemplates'.format(org_id))
+        templates_dict.update({ i['name'] : i['id'] for i in templates})
+    return templates_dict
+        
 
 
 def get_org_nets() -> list:
