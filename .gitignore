@@ -8,3 +8,4 @@ devices_status.json
 net_name_list.txt
 org_networks.json
 venv
+vlan_10_network.txt
