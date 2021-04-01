@@ -31,7 +31,8 @@ def main():
         index = next((i for i, network in enumerate(net_list) if network['name'] == name), None)
         net_id = net_list[index]['id']
         network_name = net_list[index]['name']
-        vlan_10 = next(vlan['subnet'] for vlan in get_network_vlans(net_id) if vlan['id'] == 10)
+        network_vlans = get_network_vlans(net_id)
+        vlan_10 = next(vlan['subnet'] for vlan in network_vlans if vlan['id'] == 10)
         print("{:<30} - {:<20} - {:<60}".format(net_id, vlan_10, network_name))
         f.write(vlan_10 + "\n")
     f.close()
